@@ -9,7 +9,7 @@ def main():
     try:
         # 🔹 Az aktuális fájl könyvtárának elérési útját hozzáadjuk a rendszerútvonalhoz.
         # Ez biztosítja, hogy a program helyesen importálja a csomagokat és modulokat.
-        sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+        sys.path.append(os.path.dirname(os.path.abspath(__file__)))#ez az importokhoz szükséges?
 
         # 🔹 Adatbázis-szolgáltatás példányosítása
         # Ez a DatabaseService osztály példányát hozza létre, amely kezeli az adatbázis-kapcsolatot.
@@ -35,7 +35,7 @@ def main():
 
     finally:
         # 🔹 Az adatbázis-kapcsolat bezárása a program végén, ha a `db_service` létrejött
-        if 'db_service' in locals():
+        if 'db_service' in locals():# ezzel csekkolja, hogy biztosan létezik-e a változó?
             db_service.close()
 
 # 🔹 A főprogram indítása
