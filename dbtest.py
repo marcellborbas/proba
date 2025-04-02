@@ -22,7 +22,7 @@ def test_database_connection():
             
         return True
         
-    except psycopg2.OperationalError as e:
+    except psycopg2.OperationalError as e:#valami logger solution jöhetne ide, ha arról volt már szó - nice to have
         print(f"Hiba történt a kapcsolat létrehozásakor: {e}")
         print("\nGyakori okok:")
         print("- Hibás adatbázis név, felhasználónév vagy jelszó")
@@ -32,7 +32,7 @@ def test_database_connection():
         return False
         
     finally:
-        if 'conn' in locals():
+        if 'conn' in locals():#itt nem lehet előtte megnzni, hogy nyitott-e?
             conn.close()
             print("Kapcsolat lezárva")
 
