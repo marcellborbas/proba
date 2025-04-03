@@ -2,6 +2,7 @@
 
 from models.base_model import BaseModel
 
+#Ez nem teljesen fedi le a base modell-t, miért kerplt a service-be az insert?
 class Employee(BaseModel):
     """
     👨‍💼 Employee osztály, amely az alkalmazottakat kezeli az adatbázisban.

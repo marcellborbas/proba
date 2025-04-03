@@ -27,7 +27,8 @@ class DataLoader:
         :param file_path: A CSV fájl elérési útvonala.
         """
         with open(file_path, mode='r', encoding='utf-8') as file:
-            csv_reader = csv.DictReader(file)
+            #paraméterezhető elgyen, hogy van e fejléc, ha nincs, akkor lehessen megadni custom oszlopneveket - nice to have
+            csv_reader = csv.DictReader(file)#header feldolgozás hogyan van biztosítva?
             for row in csv_reader:
                 # 📌 Osztályokba tartozó adatok beszúrása
                 department_id = Department.insert_data(self.db_service, (row['department'],))
@@ -43,6 +44,8 @@ class DataLoader:
                 # 👨‍💼 Dolgozó adatainak beszúrása
                 self.insert_employee(row, department_id[0], job_id[0], location_id[0], salary_id[0])
 
+    #itt a szignatúrában lehet valahogy ajánlást/megkötést tenni a típusra?
+    #itt tök jól megvan csinálva a paraméterekre a dokumentáció, mehetne a többire is így
     def insert_employee(self, row, department_id, job_id, location_id, salary_id):
         """
         👨‍💼 Dolgozó adatainak beszúrása az adatbázisba.

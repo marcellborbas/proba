@@ -2,6 +2,13 @@
 import psycopg2
 from config.database import DATABASE_CONFIG
 
+HR_SCHEMA_QUERY = """
+SELECT EXISTS(
+    SELECT 1 FROM information_schema.schemata 
+    WHERE schema_name = 'hr'
+);
+"""
+
 class DatabaseService:
     """
     🏦 DatabaseService osztály, amely kezeli az adatbázis kapcsolatot és lekérdezéseket.
@@ -23,6 +30,9 @@ class DatabaseService:
         """
         try:
             self.conn = psycopg2.connect(**DATABASE_CONFIG)
+            #ez veszélyes, gondolom tranzakció kezelés nem nagyon volt, de jobb lenne kézzel a tranzakciós
+            #határokat meghúzni - nice to have
+            #tranzakció kezelés megnézése esetleg
             self.conn.autocommit = True
             print("✅ Adatbázis kapcsolat létrejött")
         except Exception as e:
@@ -33,12 +43,10 @@ class DatabaseService:
         """
         🛠️ Ellenőrzi, hogy a 'hr' séma létezik-e az adatbázisban.
         """
-        query = """
-        SELECT EXISTS(
-            SELECT 1 FROM information_schema.schemata 
-            WHERE schema_name = 'hr'
-        );
-        """
+        #ezt talán ki lehetne külön emelni valami statikus változóba a fájl elejére
+        #nem tudom, hogy pythonban ez mennyire pattern/anti-pattern
+
+        query = HR_SCHEMA_QUERY
         result = self.execute_query(query, fetch_one=True)
         if not result[0]:
             raise RuntimeError("❌ A 'hr' séma nem létezik az adatbázisban!")
@@ -65,7 +73,7 @@ class DatabaseService:
                 if fetch_one:
                     return cur.fetchone()
                 return cur.rowcount
-        except Exception as e:
+        except Exception as e:#fel lehetne több fajta exception-re készíteni - nice to have
             print(f"❌ Lekérdezési hiba: {e}")
             print(f"🧐 Vizsgált lekérdezés: {query}")
             raise
@@ -74,6 +82,6 @@ class DatabaseService:
         """
         🔌 Bezárja az adatbázis kapcsolatot.
         """
-        if self.conn and not self.conn.closed:
+        if self.conn and not self.conn.closed:#nice
             self.conn.close()
             print("🔌 Kapcsolat lezárva")
